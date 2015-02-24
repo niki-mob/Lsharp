@@ -22,13 +22,13 @@ namespace Tristana
         {
             _player = ObjectManager.Player;
             if (_player.BaseSkinName != ChampionName) return;
-            Game.PrintChat("Loading 'Siko Girl Tristana'...");
+            Game.PrintChat("Loading 'Tristana'...");
             Q = new Spell(SpellSlot.Q, 550);
             W = new Spell(SpellSlot.W, 900);
             E = new Spell(SpellSlot.E, 550);
             R = new Spell(SpellSlot.R, 550);
 
-            Config = new Menu("SikoGirl Tristana", ChampionName, true);
+            Config = new Menu("Tristana", ChampionName, true);
 
             var targetSelectorMenu = new Menu("Target Selector", "Target Selector");
             TargetSelector.AddToMenu(targetSelectorMenu);
@@ -56,7 +56,7 @@ namespace Tristana
             Game.OnGameUpdate += Game_OnGameUpdate;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Config.AddToMainMenu();
-            Game.PrintChat("'Siko Girl Tristana' Loaded!");
+            Game.PrintChat("'Tristana' Loaded!");
 
         }
 
