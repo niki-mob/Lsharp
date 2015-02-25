@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
 
 namespace LeBlanc_2
 {
@@ -28,13 +29,13 @@ namespace LeBlanc_2
 
             LeBlancConfig.SubMenu("MenuAssassin")
                 .SubMenu("Draw")
-                .AddItem(new MenuItem("DrawSearch", "Search Range").SetValue(new Circle(true, Color.GreenYellow)));
+                .AddItem(new MenuItem("DrawSearch", "Search Range").SetValue(new Circle(true, System.Drawing.Color.GreenYellow)));
             LeBlancConfig.SubMenu("MenuAssassin")
                 .SubMenu("Draw")
-                .AddItem(new MenuItem("DrawActive", "Active Enemy").SetValue(new Circle(true, Color.GreenYellow)));
+                .AddItem(new MenuItem("DrawActive", "Active Enemy").SetValue(new Circle(true, System.Drawing.Color.GreenYellow)));
             LeBlancConfig.SubMenu("MenuAssassin")
                 .SubMenu("Draw")
-                .AddItem(new MenuItem("DrawNearest", "Nearest Enemy").SetValue(new Circle(true, Color.DarkSeaGreen)));
+                .AddItem(new MenuItem("DrawNearest", "Nearest Enemy").SetValue(new Circle(true, System.Drawing.Color.DarkSeaGreen)));
             LeBlancConfig.SubMenu("MenuAssassin")
                 .SubMenu("Draw")
                 .AddItem(new MenuItem("DrawStatus", "Show Status").SetValue(true));
@@ -137,8 +138,8 @@ namespace LeBlanc_2
             {
                 var enemies = ObjectManager.Get<Obj_AI_Hero>().Where(xEnemy => xEnemy.IsEnemy);
                 var objAiHeroes = enemies as Obj_AI_Hero[] ?? enemies.ToArray();
-                Drawing.DrawText(Drawing.Width * 0.90f, Drawing.Height * 0.58f, Color.GreenYellow, "Assassin Status");
-                Drawing.DrawText(Drawing.Width * 0.90f, Drawing.Height * 0.58f, Color.GhostWhite, "_____________");
+                Drawing.DrawText(Drawing.Width * 0.90f, Drawing.Height * 0.58f, System.Drawing.Color.GreenYellow, "Assassin Status");
+                Drawing.DrawText(Drawing.Width * 0.90f, Drawing.Height * 0.58f, System.Drawing.Color.GhostWhite, "_____________");
                 for (int i = 0; i < objAiHeroes.Count(); i++)
                 {
                     var xCaption = objAiHeroes[i].ChampionName;
@@ -148,7 +149,7 @@ namespace LeBlanc_2
                         xCaption = "+ " + xCaption;
                         xWidth = Drawing.Width * 0.8910f;
                     }
-                    Drawing.DrawText(xWidth, Drawing.Height * 0.58f + (float)(i + 1) * 15, Color.Gainsboro,
+                    Drawing.DrawText(xWidth, Drawing.Height * 0.58f + (float)(i + 1) * 15, System.Drawing.Color.Gainsboro,
                         xCaption);
                 }
             }
@@ -175,13 +176,13 @@ namespace LeBlanc_2
                         .Where(
                             enemy => LeBlancConfig.Item("Assassin" + enemy.ChampionName).GetValue<bool>()))
             {
-                if (ObjectManager.Player.Distance(enemy) < drawSearchRange)
+                if (Vector3.Distance(ObjectManager.Player.ServerPosition, enemy.Position) < drawSearchRange)
                 {
                     if (drawActive.Active)
                         Render.Circle.DrawCircle(enemy.Position, 85f, drawActive.Color);
                 }
-                else if (ObjectManager.Player.Distance(enemy) > drawSearchRange &&
-                         ObjectManager.Player.Distance(enemy) < drawSearchRange + 400)
+                else if (Vector3.Distance(ObjectManager.Player.ServerPosition, enemy.Position) > drawSearchRange &&
+                         Vector3.Distance(ObjectManager.Player.ServerPosition, enemy.Position) < drawSearchRange + 400)
                 {
                     if (drawNearest.Active)
                         Render.Circle.DrawCircle(enemy.Position, 85f, drawNearest.Color);
