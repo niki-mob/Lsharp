@@ -1,0 +1,1 @@
+D:\C#\Dev\DevKogMaw\bin\Release\DevKogMaw.exe.config
