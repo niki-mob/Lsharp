@@ -1,0 +1,1 @@
+D:\C#\Dev\DevAnnie\bin\Release\DevAnnie.exe.config

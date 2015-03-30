@@ -53,7 +53,7 @@ namespace Tristana
 
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
 
-            Game.OnUpdate += Game_OnGameUpdate;
+            Game.OnGameUpdate += Game_OnGameUpdate;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Config.AddToMainMenu();
             Game.PrintChat("'Tristana' Loaded!");
