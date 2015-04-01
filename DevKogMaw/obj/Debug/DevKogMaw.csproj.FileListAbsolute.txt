@@ -1,1 +1,2 @@
 D:\C#\Dev\DevKogMaw\bin\Release\DevKogMaw.exe.config
+C:\Users\Ahmed\Documents\GitHub\Lsharp\DevKogMaw\bin\Release\DevKogMaw.exe.config

@@ -233,13 +233,10 @@ namespace NasusFeelTheCane
             respawnDelay = Environment.TickCount;
 
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
-            Game.OnUpdate += OnUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
         }
-        private static void OnUpdate(EventArgs args)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public static void Drawing_OnDraw(EventArgs args)
         {

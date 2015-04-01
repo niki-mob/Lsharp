@@ -36,13 +36,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>..\..\..\..\Downloads\Fluxy backup\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Users\Ahmed\Downloads\Fluxy backup\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>..\..\..\..\Downloads\Fluxy backup\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>C:\Users\Ahmed\Downloads\Fluxy backup\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\..\Downloads\Fluxy backup\System\SharpDX.dll</HintPath>
+      <HintPath>C:\Users\Ahmed\Downloads\Fluxy backup\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
