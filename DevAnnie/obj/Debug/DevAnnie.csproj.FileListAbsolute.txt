@@ -1,2 +1,0 @@
-D:\C#\Dev\DevAnnie\bin\Release\DevAnnie.exe.config
-C:\Users\Ahmed\Documents\GitHub\Lsharp\DevAnnie\bin\Release\DevAnnie.exe.config
