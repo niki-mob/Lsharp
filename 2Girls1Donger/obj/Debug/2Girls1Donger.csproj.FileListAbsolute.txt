@@ -1,2 +1,3 @@
 D:\C#\WiP\Heimy\SSJ4 Heimerdinger\bin\Release\2Girls1Donger.exe.config
 C:\Users\Ahmed\Desktop\2Girls1Donger\bin\Release\2Girls1Donger.exe.config
+C:\Users\Ahmed\Documents\GitHub\Lsharp\2Girls1Donger\bin\Release\2Girls1Donger.exe.config
