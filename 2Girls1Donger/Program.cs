@@ -58,7 +58,7 @@ namespace Two_Girls_One_Donger
         static void Game_OnGameLoad(EventArgs args)
         {
             Game.PrintChat(
-             "<font color=\"#e61515\">2Girls1Donger -<font color=\"#FFFFFF\"> Successfully Loaded.</font>");
+             "<font color=\"#e61515\">2Girls1Donger -<font color=\"#FFFFFF\"> by spawny Successfully Loaded.</font>");
             if (Player.BaseSkinName != Champion) return;
 
             #region spells            
