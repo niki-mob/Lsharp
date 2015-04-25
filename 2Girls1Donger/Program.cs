@@ -99,20 +99,20 @@ namespace Two_Girls_One_Donger
             Config.AddSubMenu(new Menu("Laneclear", "Laneclear"));
             Config.SubMenu("Laneclear").AddItem(new MenuItem("LaneclearW", "Use W")).SetValue(true);
             Config.SubMenu("Laneclear").AddItem(new MenuItem("LaneclearE", "Use E")).SetValue(false);
-            Config.SubMenu("Laneclear").AddItem(new MenuItem("LaneMana", "Minimum Mana for clear")).SetValue(new Slider(30, 100, 0));
+            Config.SubMenu("Laneclear").AddItem(new MenuItem("LaneMana", "Minimum Mana for clear")).SetValue(new Slider(30, 0, 100));
 
             //C-C-C-Combo
             Config.AddSubMenu(new Menu("Combo", "Combo"));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseQCombo", "Use Q")).SetValue(true);
             Config.SubMenu("Combo").AddItem(new MenuItem("UseQRCombo", "Use Q Upgrade")).SetValue(true);
-            Config.SubMenu("Combo").AddItem(new MenuItem("QRcount", "Minimum Enemies for Q upgrade")).SetValue(new Slider(2, 5, 1));
+            Config.SubMenu("Combo").AddItem(new MenuItem("QRcount", "Minimum Enemies for Q upgrade")).SetValue(new Slider(2, 1, 5));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseWCombo", "Use W")).SetValue(true);
             Config.SubMenu("Combo").AddItem(new MenuItem("UseWRCombo", "Use W Upgrade")).SetValue(true);
             Config.SubMenu("Combo").AddItem(new MenuItem("UseECombo", "Use E")).SetValue(true);
             Config.SubMenu("Combo").AddItem(new MenuItem("UseRCombo", "Use R")).SetValue(true);
             Config.SubMenu("Combo").AddItem(new MenuItem("UseERCombo", "Use E Upgrade")).SetValue(true);
             //Config.SubMenu("Combo").AddItem(new MenuItem("UseEAOECombo", "ER AOE")).SetValue(true);
-            Config.SubMenu("Combo").AddItem(new MenuItem("ERcount", "Minimum Enemies to Stun")).SetValue(new Slider(3, 5, 1));
+            Config.SubMenu("Combo").AddItem(new MenuItem("ERcount", "Minimum Enemies to Stun")).SetValue(new Slider(3, 1, 5));
             Config.SubMenu("Combo").AddItem(new MenuItem("KS", "Killsteal")).SetValue(true);
             Config.SubMenu("Combo").AddItem(new MenuItem("ZhoUlt", "Ult + Q > Zhonyas")).SetValue(true);
             Config.SubMenu("Combo").AddItem(new MenuItem("ActiveCombo", "Combo!").SetValue(new KeyBind(32, KeyBindType.Press)));
