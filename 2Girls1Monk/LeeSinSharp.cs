@@ -88,7 +88,7 @@ namespace two_girls_one_monk
             if (ObjectManager.Player.ChampionName != CharName) return;
             map = new Map();
 
-            Game.PrintChat("<font color=\"#e61515\">2GirlsMonk -<font color=\"#FFFFFF\"> by spawny Successfully Loaded.</font>");
+            Game.PrintChat("<font color=\"#e61515\">2Girls1Monk -<font color=\"#FFFFFF\"> by spawny Successfully Loaded.</font>");
 
             try
             {
@@ -105,11 +105,11 @@ namespace two_girls_one_monk
                 LeeSin.orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalker"));
                 
                 //Laneclear
-                Config.AddSubMenu(new Menu("Laneclear", "Farm"));
+                Config.AddSubMenu(new Menu("Laneclear", "Laneclear"));
                 Config.SubMenu("Laneclear").AddItem(new MenuItem("UseQClear", "Use Q")).SetValue(true);
                 Config.SubMenu("Laneclear").AddItem(new MenuItem("UseWClear", "Use W")).SetValue(true);
                 Config.SubMenu("Laneclear").AddItem(new MenuItem("UseEClear", "Use E")).SetValue(true);
-                Config.SubMenu("Laneclear").AddItem(new MenuItem("ActiveClear", "Farm!").SetValue(new KeyBind("V" .ToCharArray()[0], KeyBindType.Press, false)));
+                Config.SubMenu("Laneclear").AddItem(new MenuItem("ActiveClear", "Farm!").SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press, false)));
                 
                 //C-C-C-Combo
                 Config.AddSubMenu(new Menu("Combo", "Combo"));

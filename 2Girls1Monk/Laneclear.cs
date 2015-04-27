@@ -28,78 +28,92 @@ using SharpDX;
 
 namespace two_girls_one_monk
 {
-    class Laneclear : LeeSin
+    class Laneclear
     {
+        public static Obj_AI_Hero Player = ObjectManager.Player;
+
         public static void Clear()
         {
-            var minion = MinionManager.GetMinions(Player.ServerPosition, Q.Range).FirstOrDefault();
+            var minion = MinionManager.GetMinions(Player.ServerPosition, LeeSin.Q.Range).FirstOrDefault();
             if (minion == null || minion.Name.ToLower().Contains("ward")) return;
-            if (LeeSinSharp.Config.Item("UseQClear").GetValue<bool>() && Q.IsReady())
+            if (LeeSinSharp.Config.Item("UseQClear").GetValue<bool>() && LeeSin.Q.IsReady())
             {
-                if (Q.Instance.Name == "BlindMonkQOne")
+                useItems2(minion);
+                if (LeeSin.Q.Instance.Name == "BlindMonkQOne")
                 {
-                    Q.Cast(minion, true);
+                    LeeSin.Q.Cast(minion, true);
                 }
                 else if ((minion.HasBuff("BlindMonkQOne", true) ||
-                         minion.HasBuff("blindmonkqonechaos", true)) && (Q.IsKillable(minion, 1)) ||
-                         Player.Distance(minion) > 500) Q.Cast();
+                         minion.HasBuff("blindmonkqonechaos", true)) && (LeeSin.Q.IsKillable(minion, 1)) ||
+                         Player.Distance(minion) > 500) LeeSin.Q.Cast();
             }
-            if (LeeSinSharp.Config.Item("UseWClear").GetValue<bool>() && W.IsReady())
+            if (LeeSinSharp.Config.Item("UseWClear").GetValue<bool>() && LeeSin.W.IsReady())
             {
-                if ((W.Instance.Name == "BlindMonkWOne") && (Player.HealthPercent <= 80))
+                if ((LeeSin.W.Instance.Name == "BlindMonkWOne") && (Player.HealthPercent <= 80))
                 {
-                    W.Cast(Player, true);
+                    LeeSin.W.Cast(Player, true);
                 }
                 else if ((Player.HasBuff("BlindMonkWOne", true) && (Player.HealthPercent <= 75)))
-                   W.Cast();
+                    LeeSin.W.Cast();
             }
-            if (LeeSinSharp.Config.Item("UseEClear").GetValue<bool>() && E.IsReady())
+            if (LeeSinSharp.Config.Item("UseEClear").GetValue<bool>() && LeeSin.E.IsReady())
             {
-                if (E.Instance.Name == "BlindMonkEOne" && minion.IsValidTarget(E.Range))
+                if (LeeSin.E.Instance.Name == "BlindMonkEOne" && minion.IsValidTarget(LeeSin.E.Range))
                 {
-                    E.Cast();
+                    LeeSin.E.Cast();
                 }
                 else if (minion.HasBuff("BlindMonkEOne", true) && (Player.Distance(minion) > 450) && HasEnergyFor(false, true, true, false))
                 {
-                    E.Cast();
+                    LeeSin.E.Cast();
                 }
             }
         }
             public static void Jgclear()
             {
-            var jngm = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            var jngm = MinionManager.GetMinions(Player.ServerPosition, LeeSin.Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
             if (jngm == null || jngm.Name.ToLower().Contains("ward")) return;
-            if (LeeSinSharp.Config.Item("UseQClear").GetValue<bool>() && Q.IsReady())
+            if (LeeSinSharp.Config.Item("UseQClear").GetValue<bool>() && LeeSin.Q.IsReady())
             {
-                if (Q.Instance.Name == "BlindMonkQOne")
+                useItems2(jngm);
+                if (LeeSin.Q.Instance.Name == "BlindMonkQOne")
                 {
-                    Q.Cast(jngm, true);
+                    LeeSin.Q.Cast(jngm, true);
                 }
                 else if ((jngm.HasBuff("BlindMonkQOne", true) ||
-                         jngm.HasBuff("blindmonkqonechaos", true)) && (Q.IsKillable(jngm, 1)) ||
-                         Player.Distance(jngm) > 500) Q.Cast();
+                         jngm.HasBuff("blindmonkqonechaos", true)) && (LeeSin.Q.IsKillable(jngm, 1)) ||
+                         Player.Distance(jngm) > 500) LeeSin.Q.Cast();
             }
-            if (LeeSinSharp.Config.Item("UseWClear").GetValue<bool>() && W.IsReady())
+            if (LeeSinSharp.Config.Item("UseWClear").GetValue<bool>() && LeeSin.W.IsReady())
             {
-                if ((W.Instance.Name == "BlindMonkWOne") && (Player.HealthPercent <= 80))
+                if ((LeeSin.W.Instance.Name == "BlindMonkWOne") && (Player.HealthPercent <= 80))
                 {
-                    W.Cast(Player, true);
+                    LeeSin.W.Cast(Player, true);
                 }
                 else if ((Player.HasBuff("BlindMonkWOne", true) && (Player.HealthPercent <= 75)))
-                    W.Cast();
+                    LeeSin.W.Cast();
             }
-            if (LeeSinSharp.Config.Item("UseEClear").GetValue<bool>() && E.IsReady())
+            if (LeeSinSharp.Config.Item("UseEClear").GetValue<bool>() && LeeSin.E.IsReady())
             {
-                if (E.Instance.Name == "BlindMonkEOne" && jngm.IsValidTarget(E.Range))
+                if (LeeSin.E.Instance.Name == "BlindMonkEOne" && jngm.IsValidTarget(LeeSin.E.Range))
                 {
-                    E.Cast();
+                    LeeSin.E.Cast();
                 }
                 else if (jngm.HasBuff("BlindMonkEOne", true) && (Player.Distance(jngm) > 450) && HasEnergyFor(false, true, true, false))
                 {
-                    E.Cast();
+                    LeeSin.E.Cast();
                 }
             }
         }
+
+            public static void useItems2(Obj_AI_Base enemy)
+            {
+            if ((Items.CanUseItem(3077) && Player.Distance(enemy) < 350) && Utility.CountEnemiesInRange(350) >= 1)
+            Items.UseItem(3077);
+            if ((Items.CanUseItem(3074) && Player.Distance(enemy) < 350) && Utility.CountEnemiesInRange(350) >= 1)
+            Items.UseItem(3074);
+            }
+        
+        
             static bool HasEnergyFor(bool Q, bool W, bool E, bool R)
             {
                 float totalCost = 0;
