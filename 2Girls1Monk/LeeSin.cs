@@ -44,7 +44,7 @@ namespace two_girls_one_monk
         public static Spellbook sBook = Player.Spellbook;
         public static float lastwardjump = 0;
         public static float lasttick = 0;
-        public static SpellSlot smiteSlot;
+        public static SpellSlot smiteSlot, flashSlot, igniteSlot;
         public static Obj_AI_Base minionsmite;
         public static Orbwalking.Orbwalker orbwalker;
 
@@ -88,6 +88,11 @@ namespace two_girls_one_monk
         //    Laneclear.Clear();
         //}
 
+        public static void insecOrbwalk(Obj_AI_Base Target)
+        {
+            Orbwalking.Orbwalk(Orbwalking.InAutoAttackRange(Target) ? Target : null, Game.CursorPos);
+        }
+        
         public static void doHarass()
         {
             if (LockedTarget == null)
@@ -116,7 +121,7 @@ namespace two_girls_one_monk
             useItems(Target);
             if (LeeSinSharp.Config.Item("UseWCombo").GetValue<bool>() && W.IsReady())
             {
-                if ((W.Instance.Name == "BlindMonkWOne") && (Player.HealthPercent <= 80))
+                if ((W.Instance.Name == "BlindMonkWOne") && (Player.HealthPercent <= 80) && Player.Distance(LockedTarget) <= 375)
                 {
                     W.Cast(Player, true);
                 }
@@ -133,7 +138,7 @@ namespace two_girls_one_monk
                     castQSecondSmart();
                 castE2();
             }
-            if(inDistance(LockedTarget.Position.To2D(), Player.ServerPosition.To2D(), 1600))
+            if(inDistance(LockedTarget.Position.To2D(), Player.ServerPosition.To2D(), 1700))
             {
                 if (Vector3.Distance(Player.ServerPosition, LockedTarget.Position) <= Q.Range)
                 {
@@ -144,12 +149,12 @@ namespace two_girls_one_monk
                     if (R.IsReady() && R.IsKillable(LockedTarget))
                         R.Cast(LockedTarget);
                 }
-            if (Vector3.Distance(Player.ServerPosition, LockedTarget.Position) > Q.Range)                
+            if ((Vector3.Distance(Player.ServerPosition, LockedTarget.Position) > Q.Range) && W.IsReady())                
             {
-                    if (W.IsReady())
+                if (Player.HasBuff("BlindMonkWOne") || !Q.IsReady())
+                    return;
                     {
-                        
-                        wardJump(LockedTarget.Position.To2D());
+                        wardJump(LockedTarget.Position.To2D() - Q.Range);
                         castQFirstSmart();
                         castQSecondSmart();
                         castEFirst();
@@ -163,7 +168,7 @@ namespace two_girls_one_monk
             {
                 if (W.IsReady())
                     {
-                    wardJump(LockedTarget.Position.To2D());
+                    wardJump(LockedTarget.Position.To2D() - Q.Range);
                     castQSecondSmart();
                     castEFirst();
                     castE2();
@@ -185,16 +190,17 @@ namespace two_girls_one_monk
                         {
                             insec1();
                         }
-                        if (hero.IsAlly && !hero.IsMe && hero != null && hero.Distance(Player) > 1500 && Utility.CountEnemiesInRange(2000) >= 1)
-                        {
-                            insec2();
-                        }
                         else 
                         {
                             insec();
                         }
                 }
                 
+        }
+        public static bool SmiteReady()
+        {
+            smiteSlot = LeeSinSharp.SmiteName.Any(i => Player.GetSpellSlot(i) != SpellSlot.Unknown) ? Player.GetSpellSlot(LeeSinSharp.SmiteName.First(i => Player.GetSpellSlot(i) != SpellSlot.Unknown)) : SpellSlot.Unknown;
+            return (smiteSlot != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(smiteSlot) == SpellState.Ready);
         }
         public static double SmiteDmg()
         {
@@ -204,7 +210,20 @@ namespace two_girls_one_monk
             };
             return Player.Spellbook.CanUseSpell(smiteSlot) == SpellState.Ready ? dmg.Max() : 0;
         }
-        
+        public static bool SmiteCollision(Obj_AI_Hero Target, Spell Skill)
+        {
+            if (!SmiteReady()) return false;
+            var ListCol = Skill.GetPrediction(Target).CollisionObjects.Where(i => IsValid(i, Skill.Range) && Skill.WillHit(i.Position, Target.Position, (int)i.BoundingRadius));
+            if (Skill.IsInRange(Target.Position) && ListCol.Count() == 1)
+            {
+                if (ListCol.First() is Obj_AI_Minion && CastSmite(ListCol.First()))
+                {
+                    Skill.Cast(Target.Position);
+                    return true;
+                }
+            }
+            return false;
+        }
         public static bool loaidraw()
         {
             foreach (Obj_AI_Hero hero1 in ObjectManager.Get<Obj_AI_Hero>())
@@ -214,7 +233,18 @@ namespace two_girls_one_monk
             }
             return false;
         }
-
+        public static bool IsValid(Obj_AI_Base Target, float Range = float.MaxValue, bool EnemyOnly = true, Vector3 From = default(Vector3))
+        {
+            if (Target == null || !Target.IsValid || Target.IsDead || !Target.IsVisible || (EnemyOnly && !Target.IsTargetable) || (EnemyOnly && Target.IsInvulnerable) || Target.IsMe) return false;
+            if (EnemyOnly ? Target.IsAlly : Target.IsEnemy) return false;
+            if ((From != default(Vector3) ? From : Player.Position).Distance(Target.Position) > Range) return false;
+            return true;
+        }
+        public static bool CastSmite(Obj_AI_Base Target, bool Killable = true)
+        {
+            if (!SmiteReady() || !IsValid(Target, 760) || (Killable && Target.Health > Player.GetSummonerSpellDamage(Target, Damage.SummonerSpell.Smite))) return false;
+            return Player.Spellbook.CastSpell(smiteSlot, Target);
+        }
         public static void insec()
         {
             if (!R.IsReady())
@@ -274,42 +304,42 @@ namespace two_girls_one_monk
 
             }
         }
-        public static void insec2()
-        {
-            if (!R.IsReady())
-            {
-                da = false;
-                return;
-            }
-            try
-            {
-                var allminions = ObjectManager.Get<Obj_AI_Minion>().Where(minions => minions.Distance(Player) < 1000);
+        //public static void insec2()
+        //{
+        //    if (!R.IsReady())
+        //    {
+        //        da = false;
+        //        return;
+        //    }
+        //    try
+        //    {
+        //        var allminions = ObjectManager.Get<Obj_AI_Minion>().Where(minions => minions.Distance(Player) < 1000);
 
-                var minMin = allminions.Min();
+        //        var minMin = allminions.Min();
 
-                var maxMin = allminions.Max();
-                if (da && !W.IsReady())
-                {
-                    R.Cast(LockedTarget);
-                }
-                if ( maxMin.Distance(LockedTarget) <= 500 && Player.Distance(maxMin) <= Q.Range && W.IsReady())
-                {
-                    Q.Cast(maxMin.Position);
-                    if (maxMin.HasBuff("BlindMonkQOne", true) || maxMin.HasBuff("blindmonkqonechaos", true))
-                        Q.Cast(maxMin.Position);
-                }
-                if (Player.Distance(getward2(LockedTarget)) < 600 && W.IsReady())
-                {
-                    wardJump(getward2(LockedTarget).To2D());
-                    da = true;
+        //        var maxMin = allminions.Max();
+        //        if (da && !W.IsReady())
+        //        {
+        //            R.Cast(LockedTarget);
+        //        }
+        //        if ( maxMin.Distance(LockedTarget) <= 500 && Player.Distance(maxMin) <= Q.Range && W.IsReady())
+        //        {
+        //            Q.Cast(maxMin.Position);
+        //            if (maxMin.HasBuff("BlindMonkQOne", true) || maxMin.HasBuff("blindmonkqonechaos", true))
+        //                Q.Cast(maxMin.Position);
+        //        }
+        //        if (Player.Distance(getward2(LockedTarget)) < 600 && W.IsReady())
+        //        {
+        //            wardJump(getward2(LockedTarget).To2D());
+        //            da = true;
 
-                }
-            }
-            catch
-            {
+        //        }
+        //    }
+        //    catch
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         public static bool getBackHarass()
         {
@@ -360,12 +390,12 @@ namespace two_girls_one_monk
         public static bool castQFirstSmart()
         {
             if (!Q.IsReady() || Qdata.Name != "BlindMonkQOne" || LockedTarget == null)
-                return false;    
+            return false;    
             PredictionOutput predict = Q.GetPrediction(LockedTarget);
-            if (predict.Hitchance >= HitChance.High && predict.CollisionObjects.Count(m => m.IsEnemy && !m.IsDead && m is Obj_AI_Minion && m.Health <= SmiteDmg()) < 2) 
+            if (inDistance(LockedTarget.Position.To2D(), Player.ServerPosition.To2D(), Q.Range))
             {
-                Player.Spellbook.CastSpell(smiteSlot, predict.CollisionObjects.Find(m => m.IsEnemy && !m.IsDead && m is Obj_AI_Minion && m.Health <= SmiteDmg()));
-                Q.Cast(predict.CastPosition);
+                if (!SmiteCollision(LockedTarget, Q)) Q.CastIfHitchanceEquals(LockedTarget, HitChance.VeryHigh);
+                else Q.Cast(predict.CastPosition);                
                 return true;
             }
             return true;

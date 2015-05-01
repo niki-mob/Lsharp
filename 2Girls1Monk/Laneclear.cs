@@ -49,11 +49,11 @@ namespace two_girls_one_monk
             }
             if (LeeSinSharp.Config.Item("UseWClear").GetValue<bool>() && LeeSin.W.IsReady())
             {
-                if ((LeeSin.W.Instance.Name == "BlindMonkWOne") && (Player.HealthPercent <= 80))
+                if ((LeeSin.W.Instance.Name == "BlindMonkWOne") && (Player.HealthPercent <= 75))
                 {
                     LeeSin.W.Cast(Player, true);
                 }
-                else if ((Player.HasBuff("BlindMonkWOne", true) && (Player.HealthPercent <= 75)))
+                else if ((Player.HasBuff("BlindMonkWOne", true) && (Player.HealthPercent <= 70)))
                     LeeSin.W.Cast();
             }
             if (LeeSinSharp.Config.Item("UseEClear").GetValue<bool>() && LeeSin.E.IsReady())
@@ -80,8 +80,8 @@ namespace two_girls_one_monk
                     LeeSin.Q.Cast(jngm, true);
                 }
                 else if ((jngm.HasBuff("BlindMonkQOne", true) ||
-                         jngm.HasBuff("blindmonkqonechaos", true)) && (LeeSin.Q.IsKillable(jngm, 1)) ||
-                         Player.Distance(jngm) > 500) LeeSin.Q.Cast();
+                         jngm.HasBuff("blindmonkqonechaos", true)) || Player.Distance(jngm) > 500 && !Player.HasBuff("BlindMonkFlurry", true)) 
+                    LeeSin.Q.Cast();
             }
             if (LeeSinSharp.Config.Item("UseWClear").GetValue<bool>() && LeeSin.W.IsReady())
             {
@@ -107,9 +107,9 @@ namespace two_girls_one_monk
 
             public static void useItems2(Obj_AI_Base enemy)
             {
-            if ((Items.CanUseItem(3077) && Player.Distance(enemy) < 350) && Utility.CountEnemiesInRange(350) >= 1)
+            if ((Items.CanUseItem(3077) && Player.Distance(enemy) < 350))
             Items.UseItem(3077);
-            if ((Items.CanUseItem(3074) && Player.Distance(enemy) < 350) && Utility.CountEnemiesInRange(350) >= 1)
+            if ((Items.CanUseItem(3074) && Player.Distance(enemy) < 350))
             Items.UseItem(3074);
             }
         

@@ -63,6 +63,8 @@ namespace two_girls_one_monk
         public static bool waitingForQ2 = false;
 
         public static Obj_AI_Hero target;
+
+        public static string[] SmiteName = { "summonersmite", "s5_summonersmiteplayerganker", "s5_summonersmitequick", "s5_summonersmiteduel", "itemsmiteaoe" };
         
         private static readonly string[] spells =
         {
@@ -198,6 +200,7 @@ namespace two_girls_one_monk
             }
             if (Config.Item("ActiveInsec").GetValue<KeyBind>().Active)
             {
+                LeeSin.insecOrbwalk(LeeSin.LockedTarget);
                 LeeSin.useinsec();
             }
 
