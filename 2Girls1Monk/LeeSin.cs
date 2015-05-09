@@ -121,11 +121,11 @@ namespace two_girls_one_monk
             useItems(Target);
             if (LeeSinSharp.Config.Item("UseWCombo").GetValue<bool>() && W.IsReady())
             {
-                if ((W.Instance.Name == "BlindMonkWOne") && (Player.HealthPercent <= 80) && Player.Distance(LockedTarget) <= 375)
+                if ((W.Instance.Name == "BlindMonkWOne") && (Player.HealthPercent <= 70) && Player.Distance(LockedTarget) <= 375)
                 {
                     W.Cast(Player, true);
                 }
-                else if ((Player.HasBuff("BlindMonkWOne", true) && (Player.HealthPercent <= 75)))
+                else if ((Player.HasBuff("BlindMonkWOne", true) && (Player.HealthPercent <= 65)))
                     W.Cast();
             }
             if(inDistance(LockedTarget.Position.To2D(), Player.ServerPosition.To2D(), 375))
@@ -138,7 +138,7 @@ namespace two_girls_one_monk
                     castQSecondSmart();
                 castE2();
             }
-            if(inDistance(LockedTarget.Position.To2D(), Player.ServerPosition.To2D(), 1700))
+            if(inDistance(LockedTarget.Position.To2D(), Player.ServerPosition.To2D(), 2100))
             {
                 if (Vector3.Distance(Player.ServerPosition, LockedTarget.Position) <= Q.Range)
                 {
@@ -154,7 +154,6 @@ namespace two_girls_one_monk
                 if (Player.HasBuff("BlindMonkWOne") || !Q.IsReady())
                     return;
                     {
-                        wardJump(LockedTarget.Position.To2D() - Q.Range);
                         castQFirstSmart();
                         castQSecondSmart();
                         castEFirst();
@@ -165,17 +164,13 @@ namespace two_girls_one_monk
                 }
             if (Vector3.Distance(Player.ServerPosition, LockedTarget.Position) > Q.Range && LockedTarget.HasBuff("BlindMonkQOne", true) ||
                          LockedTarget.HasBuff("blindmonkqonechaos", true) && Q.IsKillable(LockedTarget))
-            {
-                if (W.IsReady())
                     {
-                    wardJump(LockedTarget.Position.To2D() - Q.Range);
                     castQSecondSmart();
                     castEFirst();
                     castE2();
                     if (R.IsReady() && R.IsKillable(LockedTarget))
                         R.Cast(LockedTarget);
                     }
-                }
             }
 
         }
