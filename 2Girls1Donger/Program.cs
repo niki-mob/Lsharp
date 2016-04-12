@@ -57,8 +57,7 @@ namespace Two_Girls_One_Donger
 
         static void Game_OnGameLoad(EventArgs args)
         {
-            Game.PrintChat(
-             "<font color=\"#e61515\">2Girls1Donger -<font color=\"#FFFFFF\"> by spawny Successfully Loaded.</font>");
+            Notifications.AddNotification("2Girls1Donger Loaded", 3000);
             if (Player.CharData.BaseSkinName != Champion) return;
 
             #region spells            
@@ -309,7 +308,7 @@ namespace Two_Girls_One_Donger
                     }
                     if (W.IsReady() && Config.Item("UseWRCombo").GetValue<bool>() && Config.Item("UseRCombo").GetValue<bool>() &&
                         R.IsReady() && target.IsValidTarget(W.Range) &&
-                        wpred.Hitchance >= HitChance.High && CalcDamage(target) > target.Health)
+                        wpred.Hitchance >= HitChance.High && CalcDamage(target) >= target.Health)
                     {
                         R.Cast();
 
