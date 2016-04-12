@@ -1,1 +1,2 @@
 C:\Users\Ahmed\Downloads\Lsharp-master\Lsharp-master\2Girls1Donger\bin\Release\2Girls1Donger.exe.config
+C:\Users\Ahmed\Documents\GitHub\Lsharp\2Girls1Donger\bin\Release\2Girls1Donger.exe.config
